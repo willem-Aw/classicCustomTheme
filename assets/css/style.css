@@ -327,7 +327,8 @@ input:focus-visible {
 
         .lh__logo {
 
-            .lh__logo-link {
+            .lh__logo-link,
+            .custom-logo-link {
                 padding: var(--_logo-padding);
                 width: var(--_logo-width);
             }
@@ -654,7 +655,8 @@ input:focus-visible {
 
             &>p {
                 margin-block-end: 0.5rem;
-/* 
+
+                /* 
                 &:first-of-type {
                     line-height: var(--_paragraph-height);
                     height: calc(var(--_paragraph-height) * 4);

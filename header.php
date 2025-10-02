@@ -48,9 +48,10 @@
                     </li>
                 </ul> -->
             </nav>
-            <form class="flex">
+            <!-- <form class="flex">
                 <input type="search" placeholder="Search" aria-label="Search">
                 <button class="btn-sm btn-primary text-center btn-border-primary" type="submit">Search</button>
-            </form>
+            </form> -->
+            <?= get_search_form() ?>
         </div>
     </header>
