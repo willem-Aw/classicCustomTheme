@@ -1,5 +1,5 @@
 <?php get_header() ?>
-
+<h1>This is the homepage</h1>
 <?php if (have_posts()): ?>
     <?php while (have_posts()): the_post() ?>
         <section class="container-full room-type">
@@ -33,5 +33,4 @@
 <?php else: ?>
     <h2>No posts found</h2>
 <?php endif; ?>
-
 <?php get_footer() ?>
