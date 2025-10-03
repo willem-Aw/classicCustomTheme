@@ -1,9 +1,16 @@
 <footer class="container-full footer">
     <div class="lh__footer flex-column-center">
         <div class="lh__footer-logo">
-            <a href="#">
+            <!-- <a href="#">
                 <img src="./assets/imgs/Logo.svg" alt="Larana Logo">
-            </a>
+            </a> -->
+            <?php if (function_exists('the_custom_logo') && has_custom_logo()) {
+                the_custom_logo();
+            } else { ?>
+                <a href="<?php echo esc_url(home_url('/')); ?>" class="lh__logo-link">
+                    <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/imgs/Logo.png'); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?> Logo">
+                </a>
+            <?php } ?>
         </div>
         <p>
             Copyright &copy; <span class="current-year">2025</span>

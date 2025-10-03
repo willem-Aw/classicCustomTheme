@@ -248,6 +248,7 @@ section.has-padding {
     padding: 0.5rem 1.75rem;
     font-size: var(--regular-font-size);
     font-weight: var(--medium-font-weight);
+    border-radius: .25rem;
 }
 
 .btn-sm {
@@ -264,6 +265,7 @@ section.has-padding {
     border: 1.5px solid var(--primary-color);
     color: var(--primary-color);
     transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+    border-radius: .25rem;
 
     &:hover {
         background-color: var(--primary-color);
@@ -276,6 +278,7 @@ section.has-padding {
     background-color: var(--primary-color);
     color: var(--light-color);
     transition: background-color var(--transition-speed) ease;
+    border-radius: .25rem;
 
     &:hover {
         background-color: var(--secondary-color);
@@ -292,6 +295,10 @@ section.has-padding {
 
 .text-center {
     text-align: center;
+}
+
+.mb-block-1 {
+    margin-block: 1rem;
 }
 
 
@@ -901,15 +908,35 @@ input:focus-visible {
         /* grid-template-columns: repeat(4, var(--_room-card-width)); */
         grid-template-columns: repeat(auto-fill, minmax(var(--_room-card-width), 1fr));
 
-        .lh__room-type-card-content {
+        /* .lh__room-type-card-content {
             &>p {
                 &:first-of-type {
                     height: initial;
                 }
             }
+        } */
+    }
+}
+
+.pagination-wrapper {
+    margin-block: calc(var(--section-padding-block) / 2) 0;
+    text-align: center;
+
+    .page-numbers {
+        display: inline-block;
+        padding: .5rem .75rem;
+        border: 1.5px solid var(--primary-color);
+        color: var(--primary-color);
+        font-size: var(--small-font-size);
+        font-weight: var(--regular-font-weight);
+        transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+
+        &.current,
+        &:hover {
+            background-color: var(--primary-color);
+            color: var(--light-color);
         }
     }
-
 }
 
 
