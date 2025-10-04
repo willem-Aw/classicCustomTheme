@@ -4,23 +4,24 @@ function my_theme_support()
     // make title of the page dynamic
     add_theme_support('title-tag');
     // add support for featured image
-    add_theme_support( 'post-thumbnails' );
+    add_theme_support('post-thumbnails');
     //menu support
-    add_theme_support( 'menus' );
+    add_theme_support('menus');
 
     // register the menu
     register_nav_menu('header-menu', 'Header Menu');
     register_nav_menu('footer-menu', 'Footer Menu');
 
     // add_theme_support( 'custom-logo' );
-    add_theme_support( 'custom-logo', array(
+    add_theme_support('custom-logo', array(
         'height'      => 100,
         'width'       => 300,
         'flex-height' => true,
         'flex-width'  => true,
         // 'header-text' => array( 'site-title', 'site-description' ),
-    ) );
-    
+    ));
+    // add custom image size
+    add_image_size('card-thumb', 400, 280, true); // Hard crop mode
 }
 
 // function to add the front assets
@@ -57,31 +58,82 @@ function my_theme_title($title)
 /**
  * Change the title separator
  */
-function my_theme_title_separator(){
+function my_theme_title_separator()
+{
     return '|';
 }
 
 /**
  * Add class to the menu "li"
  */
-function my_theme_menu_class($classes){
+function my_theme_menu_class($classes)
+{
     $classes[] = 'nav-item';
     return $classes;
 }
 /**
  * Add class to the menu link "a"
  */
-function my_theme_menu_link_class($attributes){
+function my_theme_menu_link_class($attributes)
+{
     $attributes['class'] = 'lh__nav-link btn-sm btn-primary text-center btn-border-primary';
     return $attributes;
 }
+
+/**
+ * Uncomment the code below to add a custom meta box without using a class
+ */
+// function my_theme_custom_meta_box()
+// {
+//     add_meta_box('my_theme_sponsor_field', 'Sponsoring', 'my_theme_custom_meta_sponsor_html', 'post', 'side');
+// }
+
+
+// function my_theme_custom_meta_sponsor_html()
+// {
+    // checked(get_post_meta(get_the_ID(), 'my_theme_sponsor_field', true), '1');
+    // close php to write html
+?>
+    <!-- <input type="hidden" value="0" name="my_theme_sponsor_field" />
+    <input type="checkbox" value="1" name="my_theme_sponsor_field" id="sponsor_field" <?= checked(get_post_meta(get_the_ID(), 'my_theme_sponsor_field', true), '1') ?> />
+    <label for="sponsor_field" class="components-checkbox-control__label">Is this a sponsored post ?</label> -->
+    <!-- re-open php -->
+<?php
+// }
+
+// function my_theme_save_sponsor($post_id)
+// {
+//     // check if the metadata exist && user can edit the post
+//     if (array_key_exists('my_theme_sponsor_field', $_POST) && current_user_can('edit_post', $post_id)) {
+//         if ($_POST['my_theme_sponsor_field'] == '1') {
+//             update_post_meta($post_id, 'my_theme_sponsor_field', '1');
+//         } else {
+//             delete_post_meta($post_id, 'my_theme_sponsor_field');
+//         }
+//     }
+// }
 
 // add the theme support
 add_action('after_setup_theme', 'my_theme_support');
 // enqueue the style
 add_action('wp_enqueue_scripts', 'add_front_theme_assets');
-// filter
+// add filter
 // add_filter('wp-title', 'my_theme_title');
-add_filter( 'document_title_separator', 'my_theme_title_separator' );
-add_filter('nav_menu_css_class','my_theme_menu_class' );
-add_filter('nav_menu_link_attributes','my_theme_menu_link_class' );
+add_filter('document_title_separator', 'my_theme_title_separator');
+add_filter('nav_menu_css_class', 'my_theme_menu_class');
+add_filter('nav_menu_link_attributes', 'my_theme_menu_link_class');
+/**
+ * Uncomment the code below to add a custom meta box without using a class
+ */
+// add custom meta box
+// add_action('add_meta_boxes', 'my_theme_custom_meta_box');
+// on save post
+// add_action('save_post', 'my_theme_save_sponsor');
+
+/**
+ * Using a class to create a custom meta box
+ */
+// Register the SponsoringMetaBox
+require_once get_template_directory() . '/metaboxes/sponsoring.php';
+
+SponsoringMetaBox::register();

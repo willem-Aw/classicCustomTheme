@@ -10,8 +10,8 @@
                     <li class="item lh__room-type-card">
                         <div class="lh__room-type-card">
                             <figure>
-                                <a href="#">
-                                    <img src="<?php the_post_thumbnail('medium'); ?>" alt="Room Type Image">
+                                <a href="<?php the_permalink() ?>">
+                                    <?php the_post_thumbnail('card-thumb', ['class' => 'img-cs-size', 'alt' => '']); ?>
                                 </a>
                             </figure>
                             <div class="lh__room-type-card-content flex-column-between">

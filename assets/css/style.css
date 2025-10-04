@@ -614,6 +614,9 @@ input:focus-visible {
 
         figure {
             position: relative;
+            height: var(--_room-figure-height);
+            margin: 0;
+            overflow: hidden;
 
             &::before,
             &::after {

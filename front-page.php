@@ -70,7 +70,7 @@ $posts_query = new WP_Query([
                     <div class="lh__room-type-card">
                         <figure>
                             <a href="<?php the_permalink(); ?>">
-                                <img src="<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'medium')); ?>" alt="<?php the_title_attribute(); ?>">
+                                <?php the_post_thumbnail('card-thumb', ['class' => 'img-cs-size', 'alt' => '']); ?>
                             </a>
                         </figure>
                         <div class="lh__room-type-card-content flex-column-between">
