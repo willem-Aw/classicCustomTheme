@@ -80,6 +80,27 @@ function my_theme_menu_link_class($attributes)
     return $attributes;
 }
 
+/**
+ * Uncomment the code below to add a custom meta box without using a class
+ */
+// function my_theme_custom_meta_box()
+// {
+//     add_meta_box('my_theme_sponsor_field', 'Sponsoring', 'my_theme_custom_meta_sponsor_html', 'post', 'side');
+// }
+
+
+// function my_theme_custom_meta_sponsor_html()
+// {
+    // checked(get_post_meta(get_the_ID(), 'my_theme_sponsor_field', true), '1');
+    // close php to write html
+?>
+    <!-- <input type="hidden" value="0" name="my_theme_sponsor_field" />
+    <input type="checkbox" value="1" name="my_theme_sponsor_field" id="sponsor_field" <?php //echo (checked(get_post_meta(get_the_ID(), 'my_theme_sponsor_field', true), '1')) ?> />
+    <label for="sponsor_field" class="components-checkbox-control__label">Is this a sponsored post ?</label> -->
+    <!-- re-open php -->
+<?php
+// }
+
 // function my_theme_save_sponsor($post_id)
 // {
 //     // check if the metadata exist && user can edit the post
@@ -93,80 +114,16 @@ function my_theme_menu_link_class($attributes)
 // }
 
 
-function my_theme_init()
-{
-    /**
-     * Register a custom taxonomy "room" for posts
-     *
-     * Purpose:
-     * - Groups posts into "Rooms" (works like categories).
-     * - Hierarchical = true makes it behave like categories (parent/child).
-     * - show_in_rest = true exposes the taxonomy to the block editor / REST API.
-     * - show_admin_column = true adds the taxonomy column to the post list in admin.
-     *
-     * Notes for the recipient:
-     * - Change the second argument ('post') to a custom post type slug if you want rooms
-     *   to apply to a CPT instead of regular posts.
-     * - Edit the labels array to localize or change visible text in the admin UI.
-     * - If you add or change rewrite rules, flush permalinks (Settings → Permalinks or
-     *   run `wp rewrite flush`) after deployment.
-     */
+function my_theme_init () {
     register_taxonomy(
         'room',
         'post',
-        [
+        [   
             'labels' => [
-                'name' => 'Rooms',
-                'singular_name' => 'Room',
-                'menu_name' => 'Rooms',
-                'all_items' => 'All Rooms',
-                'edit_item' => 'Edit Room',
-                'view_item' => 'View Room',
-                'update_item' => 'Update Room',
-                'add_new_item' => 'Add New Room',
-                'new_item_name' => 'New Room Name',
-                'search_items' => 'Search Rooms',
-            ],
-            'show_in_rest' => true,
-            'hierarchical' => true,
-            'show_admin_column' => true,
+                'name' => 'Room'
+            ]
         ]
     );
-
-    /**
-     * Register a custom post type "estate" for real estate properties
-     *
-     * Purpose:
-     * - Creates a new content type "Estates" separate from regular posts
-     * - Appears in admin menu with building icon
-     * - Supports featured images, titles, and content editor
-     * - Uses Gutenberg/block editor
-     * - Has its own archive page
-     *
-     * Parameters explained:
-     * - 'public' => true: Makes the post type visible in admin and frontend
-     * - 'menu_position' => 4: Places menu item after "Posts" in admin
-     * - 'menu_icon': Uses WordPress dashicon for visual recognition
-     * - 'supports': Enables specific editing features
-     * - 'show_in_rest': Enables Gutenberg editor
-     * - 'has_archive': Enables listing page at /estate/
-     *
-     * Notes for the recipient:
-     * - Add 'rewrite' => ['slug' => 'properties'] to customize URL structure
-     * - Add more 'supports' values for additional features like 'excerpt', 'custom-fields'
-     * - After changing 'rewrite' rules, flush permalinks in WP admin
-     * - To add custom fields, use Advanced Custom Fields plugin or register meta boxes
-     */
-    register_post_type('estate', [
-        'label' => 'Estates',
-        'public' => true,
-        'menu_position' => 4,
-        'menu_icon' => 'dashicons-building',
-        'supports' => ['title', 'thumbnail', 'editor'],
-        // acitivate bloc editor
-        'show_in_rest' => true,
-        'has_archive' => true,
-    ]);
 }
 
 add_action('init', 'my_theme_init');

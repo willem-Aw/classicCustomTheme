@@ -1,7 +1,9 @@
+<!-- this is for the archive of the custom post type "estate" -->
 <?php get_header() ?>
 
 <?php if (have_posts()): ?>
     <section class="container-full prd-listing has-padding">
+        <h1>All Estates</h1>
         <div class="lh__listing-product room-type">
             <ul class="grid prd-listing lh__room-type-cards grid">
 

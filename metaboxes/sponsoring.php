@@ -12,6 +12,17 @@ class SponsoringMetaBox
         add_action('save_post', [self::class, 'save_meta_box']);
     }
 
+
+    /**
+     * Adds a meta box to the post editing screen
+     * 
+     * @param string $id         - Meta box ID (self::META_KEY)
+     * @param string $title      - Title of the meta box
+     * @param callable $callback - Function that fills the box with the desired content
+     * @param string $screen    - The screen where to show the box (post, page, custom_post_type)
+     * @param string $context   - The context within the screen where the box should display 
+     *                           ('normal', 'side', 'advanced')
+     */
     public static function add_meta_box()
     {
         add_meta_box(self::META_KEY, 'Sponsoring', [self::class, 'render_meta_box'], 'post', 'side');
