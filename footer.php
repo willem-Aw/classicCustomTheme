@@ -13,7 +13,7 @@
             <?php } ?>
         </div>
         <p>
-            Copyright &copy; <span class="current-year">2025</span>
+            Copyright &copy; <span class="current-year"><?= date("Y") ?></span>
         </p>
         <nav class="lh__footer-navbar">
             <!-- <ul class="lh__footer-nav-links flex-center">
@@ -37,6 +37,12 @@
                 'menu_class' => 'lh__footer-nav-links flex-center'
             ]); ?>
         </nav>
+        <div class="lh__footer-hour">
+            <?php $agency_hour = get_option('agency_hour', ''); ?>
+            <?php if ($agency_hour) : ?>
+                <p>Working hours: <br/> <?php echo esc_html($agency_hour); ?></p>
+            <?php endif; ?>
+        </div>
     </div>
 </footer>
 <?php wp_footer() ?>

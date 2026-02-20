@@ -113,7 +113,7 @@ function my_theme_init()
      */
     register_taxonomy(
         'room',
-        'post',
+        ['post', 'estate'], // Apply to both posts and estates
         [
             'labels' => [
                 'name' => 'Rooms',
@@ -162,7 +162,8 @@ function my_theme_init()
         'public' => true,
         'menu_position' => 4,
         'menu_icon' => 'dashicons-building',
-        'supports' => ['title', 'thumbnail', 'editor'],
+        'supports' => ['title', 'thumbnail', 'editor', 'excerpt'],
+        'hierarchical' => true,
         // acitivate bloc editor
         'show_in_rest' => true,
         'has_archive' => true,
@@ -192,5 +193,111 @@ add_filter('nav_menu_link_attributes', 'my_theme_menu_link_class');
  */
 // Register the SponsoringMetaBox
 require_once get_template_directory() . '/metaboxes/sponsoring.php';
+require_once get_template_directory() . '/options/agency.php';
 
 SponsoringMetaBox::register();
+AgencyMenuPage::register();
+
+/**
+ * Add custom columns to the Estates admin list view
+ * 
+ * This adds two custom columns to the estate post type in WordPress admin:
+ * 1. 'thumbnail' - Displays the post's featured image thumbnail
+ * 2. 'sponsored' - Shows whether the estate is sponsored (Yes/No) based on 'my_theme_sponsor_field' meta
+ */
+add_filter('manage_estate_posts_columns', function ($columns) {
+    return [
+        'cb' => $columns['cb'], // Keep the checkbox column
+        'thumbnail' => 'Thumbnail', // Add a thumbnail column
+        'title' => $columns['title'], // Keep the title column
+        'sponsored' => 'Sponsored', // Add a sponsored column
+        'date' => $columns['date'], // Keep the date column
+    ];
+});
+
+/**
+ * Render the custom column content for Estates admin list
+ * 
+ * Callback function that outputs content for the custom columns:
+ * - 'thumbnail': Outputs the post thumbnail or 'No image' placeholder
+ * - 'sponsored': Outputs 'Yes' or 'No' based on 'my_theme_sponsor_field' meta value
+ * 
+ * @param string $column_name The name of the column being rendered
+ * @param int    $post_id     The ID of the current post
+ */
+add_filter('manage_estate_posts_custom_column', function ($column_name, $post_id) {
+    /* var_dump(func_get_args()); //display the arguments passed to the function for debugging
+    die(); */
+    if ($column_name === 'thumbnail') {
+        $thumbnail = get_the_post_thumbnail($post_id, 'thumbnail');
+        echo $thumbnail ? $thumbnail : 'No image';
+    } elseif ($column_name === 'sponsored') {
+        $is_sponsored = get_post_meta($post_id, 'my_theme_sponsor_field', true);
+        echo $is_sponsored ? 'Yes' : 'No';
+    }
+}, 10, 2);
+
+
+/* add_filter('manage_posts_columns', function ($columns) {
+    return [
+        'cb' => $columns['cb'], 
+        'title' => $columns['title'],
+        'sponsored' => 'Sponsored', 
+        'author' => $columns['author'], 
+        'categories' => $columns['categories'], 
+        'tags' => $columns['tags'], 
+        'taxonomy-room' => $columns['taxonomy-room'], 
+        'comments' => $columns['comments'], 
+        'date' => $columns['date'], 
+    ];
+}); */
+
+/* add_filter('manage_posts_custom_column', function ($column_name, $post_id) {
+    if ($column_name === 'sponsored') {
+        $is_sponsored = get_post_meta($post_id, 'my_theme_sponsor_field', true);
+        echo $is_sponsored ? 'Yes' : 'No';
+    }
+}); */
+
+/**
+ * Add 'Sponsored' column to the Posts admin list view
+ * 
+ * Inserts a 'Sponsored' column right after the 'categories' column in the
+ * WordPress posts admin list. This allows admins to see which posts are
+ * sponsored directly from the posts list table.
+ * 
+ * @param array $columns Existing columns array
+ * @return array Modified columns array with 'sponsored' column added
+ */
+add_filter('manage_post_posts_columns', function ($columns) {
+    $new_columns = [];
+    foreach ($columns as $key => $value) {
+        $new_columns[$key] = $value;
+        if ($key === 'categories') {
+            $new_columns['sponsored'] = 'Sponsored';
+        }
+    }
+    return $new_columns;
+});
+
+
+/**
+ * Render the 'Sponsored' column content in Posts admin list
+ * 
+ * Outputs 'Yes' or 'No' for each post based on whether the post has the
+ * sponsorship meta field set. Uses SponsoringMetaBox::META_KEY to retrieve
+ * the meta value.
+ * 
+ * @param string $column_name The column name being rendered
+ * @param int    $post_id     The ID of the current post
+ */
+add_filter('manage_post_posts_custom_column', function ($column_name, $post_id) {
+    if ($column_name === 'sponsored') {
+        $is_sponsored = get_post_meta($post_id, SponsoringMetaBox::META_KEY, true);
+        echo $is_sponsored ? 'Yes' : 'No';
+    }
+}, 10, 2);
+
+add_action('admin_enqueue_scripts', function () {
+    wp_enqueue_style('admin-styles', get_template_directory_uri() . '/assets/css/admin.css');
+});

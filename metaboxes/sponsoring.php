@@ -35,8 +35,8 @@ class SponsoringMetaBox
          */
         $value = get_post_meta($post->ID, self::META_KEY, true);
 ?>
-        <input type="hidden" value="0" name="<?php self::META_KEY ?>" />
-        <input type="checkbox" value="1" name="<?php self::META_KEY ?>" id="sponsor_field" <?= ($value == '1' ? 'checked' : '') ?> />
+        <input type="hidden" value="0" name="<?= self::META_KEY ?>" />
+        <input type="checkbox" value="1" name="<?= self::META_KEY ?>" id="sponsor_field" <?= ($value == '1' ? 'checked' : '') ?> />
         <label for="sponsor_field" class="components-checkbox-control__label">Is this a sponsored post ?</label>
 <?php
     }

@@ -52,6 +52,7 @@
                 <input type="search" placeholder="Search" aria-label="Search">
                 <button class="btn-sm btn-primary text-center btn-border-primary" type="submit">Search</button>
             </form> -->
+            <!-- This is search for a file called searchform.php -->
             <?= get_search_form() ?>
         </div>
     </header>
