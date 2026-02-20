@@ -301,3 +301,33 @@ add_filter('manage_post_posts_custom_column', function ($column_name, $post_id) 
 add_action('admin_enqueue_scripts', function () {
     wp_enqueue_style('admin-styles', get_template_directory_uri() . '/assets/css/admin.css');
 });
+
+function my_theme_pre_get_posts(WP_Query $query)
+{
+
+    // if (is_admin() || !is_home() || !$query->is_main_query() || !is_search()) {
+    if (is_admin()|| !$query->is_main_query() || !is_search()) {
+        return;
+    }
+
+    if (get_query_var(SponsoringMetaBox::META_KEY) === '1') {
+        $meta_query = $query->get('meta_query', []);
+
+        $meta_query[] = [
+            'key' => SponsoringMetaBox::META_KEY,
+            'compare' => 'EXISTS',
+        ];
+
+        $query->set('meta_query', $meta_query);
+    }
+}
+
+function my_theme_query_vars($params)
+{
+    $params[] = SponsoringMetaBox::META_KEY;
+
+    return $params;
+}
+
+add_action('pre_get_posts', 'my_theme_pre_get_posts');
+add_filter('query_vars', 'my_theme_query_vars');
