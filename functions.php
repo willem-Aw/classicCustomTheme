@@ -302,32 +302,77 @@ add_action('admin_enqueue_scripts', function () {
     wp_enqueue_style('admin-styles', get_template_directory_uri() . '/assets/css/admin.css');
 });
 
+/**
+ * Modify the main query on search pages to filter sponsored posts
+ *
+ * This function hooks into 'pre_get_posts' to modify the WordPress query on search pages.
+ * When the 'sponsored' query variable is set to '1', it adds a meta_query to filter results
+ * to only show posts that have the sponsoring meta field (my_theme_sponsor_field).
+ *
+ * Conditions:
+ * - Skip if admin dashboard (is_admin())
+ * - Only modify main query ($query->is_main_query())
+ * - Only apply on search pages (is_search())
+ *
+ * @param WP_Query $query The WP_Query object to modify
+ */
 function my_theme_pre_get_posts(WP_Query $query)
 {
 
-    // if (is_admin() || !is_home() || !$query->is_main_query() || !is_search()) {
-    if (is_admin()|| !$query->is_main_query() || !is_search()) {
+    if (is_admin() || !$query->is_main_query() || !is_search()) {
         return;
     }
 
+    // Check if the 'sponsored' query var is set to '1' in the URL
     if (get_query_var(SponsoringMetaBox::META_KEY) === '1') {
+        // Get existing meta_query or initialize empty array
         $meta_query = $query->get('meta_query', []);
 
+        // Add meta_query to filter posts that have the sponsoring meta field
         $meta_query[] = [
             'key' => SponsoringMetaBox::META_KEY,
             'compare' => 'EXISTS',
         ];
 
+        // Set the modified meta_query back to the query
         $query->set('meta_query', $meta_query);
     }
 }
 
+/**
+ * Register custom query variables for WordPress
+ *
+ * This function hooks into 'query_vars' to add custom query variables that WordPress
+ * should recognize in URLs. The 'sponsored' query var allows filtering search results
+ * to show only sponsored posts via URL parameter (e.g., ?sponsored=1).
+ *
+ * @param array $params Existing query variables array
+ * @return array Modified query variables array with custom var added
+ */
 function my_theme_query_vars($params)
 {
+    // Add the sponsoring meta key to allowed query vars
     $params[] = SponsoringMetaBox::META_KEY;
 
     return $params;
 }
 
+
+function my_theme_register_widget()
+{
+    register_sidebar(
+        [
+            'id' => 'home_sidebar',
+            'name' => 'Home Sidebar',
+            'before_widget' => '<div class="home-sidebar-widget %2s" id="%1s">',
+            'after_widget' => '</div>',
+            'before_title' => '<h3 class="home-sidebar-title">',
+            'after_title' => '</h3>',
+        ]
+    );
+}
+
 add_action('pre_get_posts', 'my_theme_pre_get_posts');
 add_filter('query_vars', 'my_theme_query_vars');
+
+add_action('widgets_init', 'my_theme_register_widget');

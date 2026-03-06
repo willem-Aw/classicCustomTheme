@@ -589,7 +589,7 @@ input:focus-visible {
     .lh__room-type {
         grid-template-columns: repeat(6, 1fr);
 
-        .lh__room-title {
+        .lh__room-title, &>div:first-child {
             grid-column: 1 / span 2;
 
             &>div {
