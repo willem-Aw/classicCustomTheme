@@ -18,6 +18,15 @@
             <div>
                 <?= the_content() ?>
             </div>
+            <div class="lh__comments-wrapper">
+                <?php
+                if (comments_open() || get_comments_number()) {
+                    /* This will search if a file named "comments.php" exists in the theme.
+                    If not, it will use the default wordpress template */
+                    comments_template();
+                }
+                ?>
+            </div>
         </section>
 
         <section class="container-full prd-listing has-padding">

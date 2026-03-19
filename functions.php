@@ -7,6 +7,7 @@ function my_theme_support()
     add_theme_support('post-thumbnails');
     //menu support
     add_theme_support('menus');
+    add_theme_support('html5');
 
     // register the menu
     register_nav_menu('header-menu', 'Header Menu');
@@ -193,6 +194,7 @@ add_filter('nav_menu_link_attributes', 'my_theme_menu_link_class');
  */
 // Register the SponsoringMetaBox
 require_once get_template_directory() . '/metaboxes/sponsoring.php';
+/* include the agency options file */
 require_once get_template_directory() . '/options/agency.php';
 
 SponsoringMetaBox::register();
@@ -357,9 +359,17 @@ function my_theme_query_vars($params)
     return $params;
 }
 
+add_action('pre_get_posts', 'my_theme_pre_get_posts');
+add_filter('query_vars', 'my_theme_query_vars');
+
+require_once get_template_directory() . '/widgets/YoutubeWidgets.php';
 
 function my_theme_register_widget()
 {
+
+    /* Custom widget registration */
+    register_widget(YoutubeWidgets::class);
+
     register_sidebar(
         [
             'id' => 'home_sidebar',
@@ -372,7 +382,5 @@ function my_theme_register_widget()
     );
 }
 
-add_action('pre_get_posts', 'my_theme_pre_get_posts');
-add_filter('query_vars', 'my_theme_query_vars');
 
 add_action('widgets_init', 'my_theme_register_widget');

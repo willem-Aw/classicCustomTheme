@@ -103,9 +103,22 @@ h2 {
     line-height: var(--reglar-line-height);
 }
 
+h3 {
+    font-size: var(--medium-font-size);
+    font-weight: var(--semibold-font-weight);
+    margin-block-end: 0.25rem;
+}
+
 h4 {
     font-size: calc(var(--regular-font-size) * 1.5);
 }
+
+.lh__comments-wrapper img.avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 100vw;
+}
+
 
 .container-full {
     width: min(100%, 1920px);
@@ -589,7 +602,8 @@ input:focus-visible {
     .lh__room-type {
         grid-template-columns: repeat(6, 1fr);
 
-        .lh__room-title, &>div:first-child {
+        .lh__room-title,
+        &>div:first-child {
             grid-column: 1 / span 2;
 
             &>div {
@@ -965,5 +979,15 @@ input:focus-visible {
 
     .lh__footer-hour {
         text-align: center;
+    }
+}
+
+/* Single */
+
+.lh__comments-wrapper {
+    --depth-2-start-gap: 1.75rem;
+    
+    div[class*="depth-2"] {
+        margin-inline-start: var(--depth-2-start-gap);
     }
 }

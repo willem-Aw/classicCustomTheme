@@ -10,6 +10,13 @@
             <div>
                 <?= the_content() ?>
             </div>
+            <div>
+                <?php 
+                    if(comments_open() || get_comments_number()) {
+                        comments_template();
+                    }
+                ?>
+            </div>
         </section>
 
         <section class="container-full prd-listing has-padding">
