@@ -1,4 +1,8 @@
 <?php
+
+require_once get_template_directory() . '/options/appearance.php';
+
+
 function my_theme_support()
 {
     // make title of the page dynamic

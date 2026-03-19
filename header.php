@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <header class="container-full header">
+    <header class="container-full header" style="background-color: <?= get_theme_mod('header_color'); ?>;">
         <div class="lh__navbar container flex-space-between">
             <!-- <div class="lh__logo">
                 <a href="#" class="lh__logo-link">
