@@ -388,3 +388,59 @@ function my_theme_register_widget()
 
 
 add_action('widgets_init', 'my_theme_register_widget');
+
+
+/* docs: https://developer.wordpress.org/rest-api/ */
+// Restrict REST API access to authenticated users only
+add_filter('rest_authentication_errors', function ($result) {
+    // If a previous authentication check was applied,
+    // pass that result along without modification.
+    if (true === $result || is_wp_error($result)) {
+        return $result;
+    }
+
+    // No authentication has been performed yet.
+    // Return an error if user is not logged in.
+    if (! is_user_logged_in()) {
+        return new WP_Error(
+            'rest_not_logged_in',
+            __('You are not currently logged in.'),
+            array('status' => 401)
+        );
+    }
+
+    // Our custom authentication check should have no effect
+    // on logged-in requests
+    return $result;
+});
+
+
+/* create new entry in the rest API */
+add_action('rest_api_init', function () {
+    /** 
+     * register a new route "mytheme/v1/demo" that accepts a GET request with an "id" parameter within the URL and returns a custom message with the provided ID
+     * like: /wp-json/mytheme/v1/demo/123
+     */
+    register_rest_route('mytheme/v1', '/demo/(?P<id>\d+)', [
+        'methods' => 'GET',
+        'callback' => function ($request) {
+            // $id = $request['id'];
+            $postID = (int)$request->get_param('id');
+            $post = get_post($postID);
+            if ($post === null) {
+                return new WP_Error('rest_post_not_found', __('Post not found.'), array('status' => 404));
+            }
+            return new WP_REST_Response([
+                'id' => $postID,
+                'title' => $post->post_title,
+                'content' => $post->post_content,
+            ], 200);
+            /* 
+            return new WP_REST_Response("Hello from the REST API! ID: $id", 200); */
+        },
+        // restrict access to the endpoint to users with "edit_posts" capability (authors and above)
+        /* 'permission_callback' => function(){
+            return current_user_can('edit_posts');
+        } */
+    ]);
+});
